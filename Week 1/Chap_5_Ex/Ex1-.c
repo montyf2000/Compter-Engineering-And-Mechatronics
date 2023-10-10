@@ -23,6 +23,6 @@ int main(void)
    Volume = (4*M_PI*r*r*r)/3;
    Surface = 4*M_PI*r*r;
 
-   printf("The surface area =%f\nThe volume =%f\n",Surface,Volume);
+   printf("The surface area =%.2f\nThe volume =%.2f\n",Surface,Volume);
 
 }
