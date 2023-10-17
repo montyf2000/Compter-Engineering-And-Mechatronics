@@ -18,26 +18,26 @@ int main()
     char Vref = 5; // char because max valve 5, 1 byte not 2
 
     // Define Thermistor constants
-    float therisTemp, resOhm, tempKelvin; // float because it has decimal points
+    float therisTemp, resKOhm, tempKelvin; // float because it has decimal points
     float T0 = 298.15; // float due to decimal
-    int R0 = 10000; // int as no decimal
+    int R0 = 10; // int as no decimal
     int B = 3975; //int as no decimal
     int AnaLog0, AnaLog1; // int because whole numbers
     // User input for pins A0 and A1
    // scanf("What is the ADC reading from the arduino for the thermistor?\n", &AnaLog0);
     // scanf("What is the ADC reading from the arduino for the thermocouple?\n", &AnaLog1);
 
-    AnaLog0 = 505;
-    AnaLog1 = 406;
+    AnaLog0 = 256;
+    AnaLog1 = 256;
     // Calculate thermistor temperature in degrees C ( Part b, i,ii,iii & v)
     //i
     float thermistorVadc = ((float)AnaLog0*(float)Vref)/1024;
 
     //ii
-    resOhm = ((33/thermistorVadc)-10)*1000; // resistance of thermocople in ohms
+    resKOhm = ((33/thermistorVadc)-10); // resistance of thermocople in ohms
 
     // iii
-    tempKelvin = ((1/T0) + (1/B)*log(resOhm/R0)); // temp measured in Kelvin
+    tempKelvin = pow(((1/T0) + (1*log(resKOhm/R0))/B),-1); // temp measured in Kelvin
 
     //v
     therisTemp = TempConvertKelvinToCelcius(tempKelvin);
@@ -45,7 +45,7 @@ int main()
 
     // Calculate thermocouple temperature in degrees C ( Part c, i - iv)
     //i
-    float thermcoupleVadc = (AnaLog1*Vref)/1024;
+    float thermcoupleVadc = ((float)AnaLog1*(float)Vref)/1024;
 
     //ii
     float rawThermCoupV = (thermcoupleVadc-0.35)/54.4;
@@ -71,7 +71,7 @@ Call it from the main() function above */
 Call it from the main() function above */
 float TempConvertKelvinToCelcius(float tempKelvin)
 {
-    float result;
+    float result; //used to computer the final answer
     result = tempKelvin - 273.15;
     return (result);
 }
