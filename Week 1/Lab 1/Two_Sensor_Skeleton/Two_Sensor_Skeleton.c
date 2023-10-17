@@ -7,36 +7,59 @@ float NISTdegCtoMilliVoltsKtype(float tempDegC);  // returns EMF in millivolts
 // Inverse TC function
 float NISTmilliVoltsToDegCKtype(float tcEMFmV);  // returns temp in degC assuming 0 degC cold jcn
 
+//Changes temperature from kelvin to Celsius
+float TempConvertKelvinToCelcius(float tempKelvin);
+
+//
+
 int main()
 {
     // Define VRef
     char Vref = 5; // char because max valve 5, 1 byte not 2
 
     // Define Thermistor constants
-    float therTemp, resOhm, tempK; // float because it has decimal points
+    float therisTemp, resOhm, tempKelvin; // float because it has decimal points
     float T0 = 298.15; // float due to decimal
     int R0 = 10000; // int as no decimal
     int B = 3975; //int as no decimal
     int AnaLog0, AnaLog1; // int because whole numbers
     // User input for pins A0 and A1
-    scanf("What is the ADC reading from the arduino for the thermistor?\n", &AnaLog0);
-    scanf("What is the ADC reading from the arduino for the thermocouple?\n", &AnaLog1);
+   // scanf("What is the ADC reading from the arduino for the thermistor?\n", &AnaLog0);
+    // scanf("What is the ADC reading from the arduino for the thermocouple?\n", &AnaLog1);
+
+    AnaLog0 = 505;
+    AnaLog1 = 406;
     // Calculate thermistor temperature in degrees C ( Part b, i,ii,iii & v)
     //i
-    float Vadc = (AnaLog0*Vref)/1024;
+    float thermistorVadc = ((float)AnaLog0*(float)Vref)/1024;
 
     //ii
-    resOhm = ((33/Vadc)-10)*1000; // resistance of thermocople in ohms
+    resOhm = ((33/thermistorVadc)-10)*1000; // resistance of thermocople in ohms
 
     // iii
-    tempK = ((1/T0) + (1/B)*log(resOhm/R0)); // temp measured in Kelvin
+    tempKelvin = ((1/T0) + (1/B)*log(resOhm/R0)); // temp measured in Kelvin
+
+    //v
+    therisTemp = TempConvertKelvinToCelcius(tempKelvin);
 
 
     // Calculate thermocouple temperature in degrees C ( Part c, i - iv)
+    //i
+    float thermcoupleVadc = (AnaLog1*Vref)/1024;
+
+    //ii
+    float rawThermCoupV = (thermcoupleVadc-0.35)/54.4;
+
+    //iii
+    float EMFcomp = NISTdegCtoMilliVoltsKtype(therisTemp);  // returns EMF in millivolts
+
+    //iv
+    float thermocoupTotalV = EMFcomp+rawThermCoupV; // total voltage of 
+    float thermocopletemp = NISTmilliVoltsToDegCKtype(thermocoupTotalV);
 
     // Output results
-    printf("Thermistor temperature (deg C): %f \n", *******);
-    printf("Thermocouple temperature with CJC (deg C): %f \n", ******);
+    printf("Thermistor temperature (deg C): %f \n", therisTemp);
+    printf("Thermocouple temperature with CJC (deg C): %f \n", thermocopletemp);
 
     return 0;
 }
@@ -46,6 +69,12 @@ Call it from the main() function above */
 
 /* Write a function to convert degrees K to degrees C  (Part b, (iv))
 Call it from the main() function above */
+float TempConvertKelvinToCelcius(float tempKelvin)
+{
+    float result;
+    result = tempKelvin - 273.15;
+    return (result);
+}
 
 /* returns EMF in millivolts */
 float NISTdegCtoMilliVoltsKtype(float tempDegC)
@@ -148,3 +177,4 @@ float NISTmilliVoltsToDegCKtype(float tcEMFmV)
         }
     return tempDegC;
 }
+
