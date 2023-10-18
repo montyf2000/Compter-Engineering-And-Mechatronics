@@ -23,6 +23,7 @@ int main()
     int R0 = 10; // int as no decimal
     int B = 3975; //int as no decimal
     int AnaLog0, AnaLog1; // int because whole numbers
+    float thermistorVadc;
     // User input for pins A0 and A1
    // scanf("What is the ADC reading from the arduino for the thermistor?\n", &AnaLog0);
     // scanf("What is the ADC reading from the arduino for the thermocouple?\n", &AnaLog1);
@@ -31,7 +32,7 @@ int main()
     AnaLog1 = 256;
     // Calculate thermistor temperature in degrees C ( Part b, i,ii,iii & v)
     //i
-    float thermistorVadc = ((float)AnaLog0*(float)Vref)/1024;
+    thermistorVadc = ((float)AnaLog0*(float)Vref)/1024;
 
     //ii
     resKOhm = ((33/thermistorVadc)-10); // resistance of thermocople in ohms
@@ -44,22 +45,25 @@ int main()
 
 
     // Calculate thermocouple temperature in degrees C ( Part c, i - iv)
+    //thermocouple constants
+    float thermcoupleVadc,rawThermCoupV,EMFcompVm,thermocoupTotalVm,thermocopletempC;
+
     //i
-    float thermcoupleVadc = ((float)AnaLog1*(float)Vref)/1024;
+    thermcoupleVadc = ((float)AnaLog1*(float)Vref)/1024;
 
     //ii
-    float rawThermCoupV = (thermcoupleVadc-0.35)/54.4;
+    rawThermCoupV = (thermcoupleVadc-0.35)/54.4;
 
     //iii
-    float EMFcompVm = NISTdegCtoMilliVoltsKtype(thermisTemp);  // returns EMF in millivolts
+    EMFcompVm = NISTdegCtoMilliVoltsKtype(thermisTemp);  // returns EMF in millivolts
 
     //iv
-    float thermocoupTotalVm = (EMFcompVm)+(rawThermCoupV*1000); // total voltage of 
-    float thermocopletemp = NISTmilliVoltsToDegCKtype(thermocoupTotalVm);
+    thermocoupTotalVm = (EMFcompVm)+(rawThermCoupV*1000); // total voltage of 
+    thermocopletempC = NISTmilliVoltsToDegCKtype(thermocoupTotalVm);
 
     // Output results
     printf("Thermistor temperature (deg C): %.2f \n", thermisTemp);
-    printf("Thermocouple temperature with CJC (deg C): %.2f \n", thermocopletemp);
+    printf("Thermocouple temperature with CJC (deg C): %.2f \n", thermocopletempC);
 
     return 0;
 }
@@ -67,11 +71,18 @@ int main()
 /* Write a function here to convert ADC value to voltages. (Part a, equation 1)
 Call it from the main() function above */
 
+float ADCtoVolts(int ADCvalue, float Vref)
+{
+    float result; //used to compute the final answer
+    result = ((float)ADCvalue * Vref)/1024;
+    return(result);
+}
+
 /* Write a function to convert degrees K to degrees C  (Part b, (iv))
 Call it from the main() function above */
 float TempConvertKelvinToCelcius(float tempKelvin)
 {
-    float result; //used to computer the final answer
+    float result; //used to compute the final answer
     result = tempKelvin - 273.15;
     return (result);
 }
