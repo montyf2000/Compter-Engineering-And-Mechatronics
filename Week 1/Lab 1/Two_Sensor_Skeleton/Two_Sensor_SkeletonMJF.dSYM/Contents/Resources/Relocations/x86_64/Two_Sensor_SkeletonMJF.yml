@@ -1,0 +1,11 @@
+---
+triple:          'x86_64-apple-darwin'
+binary-path:     '/Users/montaguefoster/Mechatronics/Compter-Engineering-And-Mechatronics/Week 1/Lab 1/Two_Sensor_Skeleton/Two_Sensor_SkeletonMJF'
+relocations:
+  - { offsetInCU: 0x26, offset: 0x26, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x100003740, symSize: 0x1A0 }
+  - { offsetInCU: 0x48, offset: 0x48, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x100003740, symSize: 0x1A0 }
+  - { offsetInCU: 0x134, offset: 0x134, size: 0x8, addend: 0x0, symName: _ADCtoVolts, symObjAddr: 0x1A0, symBinAddr: 0x1000038E0, symSize: 0x30 }
+  - { offsetInCU: 0x178, offset: 0x178, size: 0x8, addend: 0x0, symName: _TempConvertKelvinToCelcius, symObjAddr: 0x1D0, symBinAddr: 0x100003910, symSize: 0x30 }
+  - { offsetInCU: 0x1AE, offset: 0x1AE, size: 0x8, addend: 0x0, symName: _NISTdegCtoMilliVoltsKtype, symObjAddr: 0x200, symBinAddr: 0x100003940, symSize: 0x260 }
+  - { offsetInCU: 0x25B, offset: 0x25B, size: 0x8, addend: 0x0, symName: _NISTmilliVoltsToDegCKtype, symObjAddr: 0x460, symBinAddr: 0x100003BA0, symSize: 0x217 }
+...
