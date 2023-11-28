@@ -19,10 +19,10 @@ int main()
     float Vref = 5; // char because max valve 5, 1 byte not 2
 
     // Define Thermistor constants
-    float thermisTemp, resKOhm, tempKelvin; // float because it has decimal points
-    float T0 = 298.15; // float due to decimal
+    float thermisTempCel, resKOhm, tempKelvin; // float because it has decimal points
+    float T0 = 298.15; // float due to decimal, is 298.15 K (i.e. 25 C)
     int R0 = 10; // int, the resistance at 25 C in k
-    int B = 3975; //int as no decimal
+    int TempBeta = 3975; //int as no decimal
     int AnaLog0, AnaLog1; // int because whole numbers
     float thermistorVadc;
     // User input for pins A0 and A1
@@ -42,10 +42,10 @@ int main()
     resKOhm = ((33/thermistorVadc)-10); // resistance of thermocople in ohms
 
     // iii
-    tempKelvin = pow(((1/T0) + (1*log(resKOhm/R0))/B),-1); // temp measured in Kelvin
+    tempKelvin = pow(((1/T0) + (1*log(resKOhm/R0))/TempBeta),-1); // temp measured in Kelvin
 
     //v
-    thermisTemp = TempConvertKelvinToCelcius(tempKelvin);
+    thermisTempCel = TempConvertKelvinToCelcius(tempKelvin);
 
 
     // Calculate thermocouple temperature in degrees C ( Part c, i - iv)
@@ -59,14 +59,14 @@ int main()
     rawThermCoupV = (thermcoupleVadc-0.35)/54.4;
 
     //iii
-    EMFcompVm = NISTdegCtoMilliVoltsKtype(thermisTemp);  // returns EMF in millivolts
+    EMFcompVm = NISTdegCtoMilliVoltsKtype(thermisTempCel);  // returns EMF in millivolts
 
     //iv
     thermocoupTotalVm = (EMFcompVm)+(rawThermCoupV*1000); // total voltage of 
     thermocopletempC = NISTmilliVoltsToDegCKtype(thermocoupTotalVm);
 
     // Output results
-    printf("Thermistor temperature (deg C): %.2f \n", thermisTemp);
+    printf("Thermistor temperature (deg C): %.2f \n", thermisTempCel);
     printf("Thermocouple temperature with CJC (deg C): %.2f \n", thermocopletempC);
 
     return 0;
